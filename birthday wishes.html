@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Birthday Wishes</title>
+
+<style>
+:root{
+  --pink:#ff6f9f;
+  --deep:#9b397c;
+  --cream:#fff8f4;
+  --ink:#51344d
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:"Trebuchet MS",Arial,sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(circle at 15% 15%,#ffe0ec 0 10%,transparent 35%),
+    radial-gradient(circle at 85% 80%,#e8dcff 0 8%,transparent 34%),
+    linear-gradient(135deg,#fff5ef,#fce8f1 55%,#f0eaff);
+  overflow-x:hidden
+}
+
+#birthday-site{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:28px 16px;
+  position:relative;
+  isolation:isolate
+}
+
+.confetti-layer,.balloon-layer{
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+  pointer-events:none;
+  z-index:-1
+}
+
+.balloon{
+  position:absolute;
+  bottom:-150px;
+  width:54px;
+  height:68px;
+  border-radius:50% 50% 46% 46%;
+  opacity:.72;
+  animation:floatUp linear infinite
+}
+
+.balloon:before{
+  content:"";
+  position:absolute;
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:inherit;
+  left:8px;
+  top:12px;
+  filter:brightness(1.12)
+}
+
+.balloon:after{
+  content:"";
+  position:absolute;
+  width:1px;
+  height:75px;
+  background:#9c8798;
+  left:50%;
+  top:67px
+}
+
+.balloon:nth-child(1){
+  left:5%;
+  background:#ff8eb5;
+  animation-duration:17s
+}
+
+.balloon:nth-child(2){
+  left:18%;
+  background:#9c8bff;
+  animation-duration:21s;
+  animation-delay:-7s;
+  transform:scale(.8)
+}
+
+.balloon:nth-child(3){
+  left:82%;
+  background:#ffc45e;
+  animation-duration:19s;
+  animation-delay:-4s
+}
+
+.balloon:nth-child(4){
+  left:94%;
+  background:#79d8c4;
+  animation-duration:23s;
+  animation-delay:-12s;
+  transform:scale(.85)
+}
+
+@keyframes floatUp{
+  0%{translate:0 0;rotate:-8deg}
+  50%{translate:20px -55vh;rotate:8deg}
+  100%{translate:-12px -125vh;rotate:-5deg}
+}
+
+.deck{
+  width:min(850px,100%);
+  position:relative
+}
+
+.topline{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  margin:0 4px 12px;
+  font-size:.9rem;
+  color:#875b79
+}
+
+.progress{
+  height:7px;
+  background:#ffffffa8;
+  border-radius:99px;
+  overflow:hidden;
+  flex:1;
+  margin:0 12px
+}
+
+.progress span{
+  display:block;
+  height:100%;
+  width:10%;
+  background:linear-gradient(90deg,#ff8eb5,#a58aff);
+  border-radius:99px;
+  transition:width .35s
+}
+
+.slide{
+  display:none;
+  min-height:500px;
+  padding:clamp(26px,6vw,58px);
+  border:1px solid #ffffffd9;
+  border-radius:30px;
+  background:#ffffffd9;
+  box-shadow:0 22px 70px #8e5d7b24;
+  text-align:center;
+  backdrop-filter:blur(12px);
+  position:relative;
+  overflow:hidden
+}
+
+.slide.active{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  animation:appear .45s ease both
+}
+
+@keyframes appear{
+  from{opacity:0;transform:translateY(14px) scale(.99)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+
+.eyebrow{
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  font-size:.75rem;
+  font-weight:800;
+  color:#b65b88;
+  margin:0 0 14px
+}
+
+h1,h2{
+  font-family:Georgia,serif;
+  color:#873c70;
+  line-height:1.12;
+  margin:0 0 18px
+}
+
+h1{font-size:clamp(2.5rem,7vw,5rem)}
+h2{font-size:clamp(2rem,5vw,3.4rem)}
+
+.message{
+  font-size:clamp(1.05rem,2.5vw,1.28rem);
+  line-height:1.75;
+  max-width:620px;
+  margin:0 auto;
+  color:#684c62
+}
+
+.emoji-art{
+  font-size:clamp(3.5rem,10vw,6rem);
+  margin:8px 0 20px;
+  filter:drop-shadow(0 9px 9px #d78aa944)
+}
+
+.name{color:#ef6496}
+
+.quote{
+  margin-top:24px;
+  padding:15px 20px;
+  border-radius:18px;
+  background:#fff0f6;
+  color:#985078;
+  font-style:italic;
+  max-width:570px
+}
+
+.actions{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-top:28px
+}
+
+button{
+  border:0;
+  border-radius:999px;
+  padding:13px 23px;
+  font-size:1rem;
+  font-weight:800;
+  cursor:pointer;
+  min-height:46px;
+  transition:transform .15s,box-shadow .15s
+}
+
+button:hover{transform:translateY(-2px)}
+
+button:focus-visible{
+  outline:3px solid #6d4dd2;
+  outline-offset:3px
+}
+
+.primary{
+  color:white;
+  background:linear-gradient(100deg,#f56e9d,#a77af2);
+  box-shadow:0 8px 18px #d978a944
+}
+
+.secondary{
+  color:#915278;
+  background:#fff0f6
+}
+
+.nav{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin:14px 4px 0;
+  gap:12px
+}
+
+.dots{
+  display:flex;
+  gap:7px;
+  justify-content:center;
+  flex-wrap:wrap
+}
+
+.dot{
+  width:9px;
+  height:9px;
+  padding:0;
+  min-height:9px;
+  border-radius:50%;
+  background:#d8bfd0
+}
+
+.dot.current{
+  background:#e76c9d;
+  transform:scale(1.35)
+}
+
+.small{
+  font-size:.85rem;
+  color:#916d86
+}
+
+.cake{
+  font-size:5rem;
+  animation:bob 2.4s ease-in-out infinite
+}
+
+@keyframes bob{
+  50%{transform:translateY(-9px) rotate(2deg)}
+}
+
+.photo-frame{
+  width:min(240px,70%);
+  aspect-ratio:1/1;
+  border:9px solid white;
+  border-radius:24px;
+  background:linear-gradient(135deg,#ffe0ec,#e7ddff);
+  box-shadow:0 10px 25px #8d5a7822;
+  display:grid;
+  place-items:center;
+  font-size:4.5rem;
+  margin:8px auto 18px
+}
+
+.photo-slot{
+  width:min(190px,55vw);
+  height:135px;
+  margin:10px auto 18px;
+  border:2px dashed #d9a5c1;
+  border-radius:18px;
+  background:#fff7fb;
+  overflow:hidden;
+  display:grid;
+  place-items:center
+}
+
+.photo-slot img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block
+}
+
+#musicStatus{
+  font-size:.82rem;
+  color:#906b84
+}
+
+.confetti{
+  position:absolute;
+  top:-15px;
+  width:9px;
+  height:14px;
+  animation:fall 3.5s linear forwards
+}
+
+@keyframes fall{
+  to{
+    transform:translateY(110vh) rotate(720deg);
+    opacity:.1
+  }
+}
+
+@media(max-width:520px){
+  .slide{
+    min-height:490px;
+    border-radius:23px;
+    padding:28px 20px
+  }
+
+  .topline{font-size:.78rem}
+  .nav{flex-wrap:wrap}
+  .nav .small{
+    order:3;
+    width:100%;
+    text-align:center
+  }
+
+  .photo-slot{
+    height:115px;
+    margin:8px auto 14px
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  *,*:before,*:after{
+    animation-duration:.01ms!important;
+    animation-iteration-count:1!important;
+    scroll-behavior:auto!important;
+    transition:none!important
+  }
+}
+</style>
+</head>
+
+<body>
+
+<main id="birthday-site">
+
+<div class="balloon-layer" aria-hidden="true">
+  <span class="balloon"></span>
+  <span class="balloon"></span>
+  <span class="balloon"></span>
+  <span class="balloon"></span>
+</div>
+
+<div class="confetti-layer" id="confettiLayer" aria-hidden="true"></div>
+
+<section class="deck" aria-label="Birthday wishes slideshow">
+
+<div class="topline">
+  <span>🎀 A little birthday surprise</span>
+  <div class="progress">
+    <span id="progressFill"></span>
+  </div>
+  <span id="count">01 / 10</span>
+</div>
+
+<!-- SLIDE 1 -->
+
+<article class="slide active">
+
+<p class="eyebrow">A special day • A special person</p>
+
+<div class="photo-slot">
+  <img src="file:///C:/Users/yenum/Downloads/image1.jpeg" alt="Birthday memory">
+</div>
+
+<div class="cake">🎂</div>
+
+<h1>Happiestt Birthday,<br>
+<span class="name" id="recipientName">chintuuu</span>!</h1>
+
+<p class="message">
+i wish you the happiestttt bday and may you get all you wanted for and may god bless you with good health 💖
+</p>
+
+<div class="actions">
+  <button class="primary" data-next>Open your surprise ✨</button>
+</div>
+
+</article>
+
+<!-- SLIDE 2 -->
+
+<article class="slide">
+
+<p class="eyebrow">Message 02 • Celebrating us</p>
+
+<div class="photo-slot">
+  <img src="file:///C:/Users/yenum/Downloads/image2.png" alt="Birthday memory">
+</div>
+
+<div class="emoji-art">🎈🎉🎈</div>
+
+<h2>cheers to the day</h2>
+
+<p class="message">
+this was the very 1st day i spoke to you and  even that 67 score made me to talk to you ,might be destiny might be a gods plan but that day changed a lot(from strangers to good frds)</p>
+
+<div class="quote">
+“You deserve a day as wonderful as you are.”
+</div>
+
+</article>
+
+<!-- SLIDE 3 -->
+
+<article class="slide">
+
+<p class="eyebrow">Message 03 • Keep shining</p>
+
+<div class="photo-slot">
+  <img src="file:///C:/Users/yenum/Downloads/image3.jpeg" alt="Birthday memory">
+</div>
+
+<div class="emoji-art"></div>
+
+<h2>Gratitude</h2>
+
+<p class="message">
+i dont know how it started and also never thought that it will come this far ,you became my bestfrd in very few days , had been there in lows ,supported me,and you had been there even in  happy days and also bored one .Thankyou for all of that 
+</p>
+
+</article>
+
+<!-- SLIDE 4 -->
+
+<article class="slide">
+
+<p class="eyebrow">Message 04 • Big dreams</p>
+
+<div class="photo-slot">
+  <img src="file:///C:/Users/yenum/Downloads/image4.jpeg" alt="Birthday memory">
+</div>
+
+<div class="emoji-art"></div>
+
+<h2>Dream big!</h2>
+
+<p class="message">
+May this new year of your life bring exciting opportunities, brave new beginnings and the courage to turn every dream into reality.and i wanna add something that never leave or forget your ammaa.since she had fought battels just to see you in such a position .Be kind to her , call every day and talk, since you are the only one who care her.
+</p>
+
+</article>
+
+<!-- SLIDE 5 -->
+
+<article class="slide">
+
+<p class="eyebrow">Message 05 • Little joys</p>
+
+<div class="photo-slot">
+  <img src="file:///C:/Users/yenum/Downloads/image1.jpeg" alt="Birthday memory">
+</div>
+
+<div class="emoji-art"></div>
+
+<h2>Collect happy moments</h2>
+
+<p class="message">
+May you enjoy the little things, laugh until your cheeks hurt, explore new places and make memories that stay with you forever. i might or might not be there for you evertime but i  i always wanted you to be kind with every one just like meee(hehehehe).and make good frds and enjoy rest of your life .
+</p>
+
+</article>
+
+<!-- SLIDE 6 -->
+
+<article class="slide">
+
+<p class="eyebrow">Message 06 • Love around you</p>
+
+<div class="photo-slot">
+  <img src="file:///C:/Users/yenum/Downloads/image5.jpeg" alt="Birthday memory">
+</div>
+
+<div class="emoji-art"></div>
+
+<h2>You are appreciated</h2>
+
+<p class="message">
+May you always be surrounded by genuine people who support you, celebrate your wins and remind you how special you are. thought you face something that you can't face remain my name and ask god to give all the streght like kousi to face this . he will help you because iam his favourite child.
+</p>
+
+</article>
+
+<!-- SLIDE 7 -->
+
+<article class="slide">
+
+<p class="eyebrow">Message 07 • A fresh chapter</p>
+
+<div class="photo-slot">
+  <img src="file:///C:/Users/yenum/Downloads/image6.jpeg" alt="Birthday memory">
+</div>
+
+<div class="emoji-art"></div>
+
+<h2>Your next chapter</h2>
+
+<p class="message">
+A new age means a new chapter. May every page bring growth, confidence, peace, good health and unforgettable adventures.and may you get all the success in HCL and enjoy every moment my senior engineer .
+</p>
+
+</article>
+
+<!-- SLIDE 8 -->
+
+<article class="slide">
+
+<p class="eyebrow">Message 08 • Sweet wishes</p>
+
+<div class="photo-slot">
+  <img src="file:///C:/Users/yenum/Downloads/image7.jpeg" alt="Birthday memory">
+</div>
+
+<div class="emoji-art"></div>
+
+<h2>Extra sweetness!</h2>
+
+<p class="message">
+Wishing you endless reasons to celebrate, unexpected good news, delicious treats and days that feel as sweet as meeeeee.
+</p>
+
+</article>
+
+<!-- SLIDE 9 -->
+
+<article class="slide">
+
+<p class="eyebrow">Message 09 • From the heart</p>
+
+<div class="photo-slot">
+  <img src="file:///C:/Users/yenum/Downloads/image8.jpeg" alt="Birthday memory">
+</div>
+
+<h2>Make a beautiful wish</h2>
+
+<p class="message">
+Take a deep breath, close your eyes and make a wish. May life surprise you with something even more beautiful than you imagined.
+</p>
+
+</article>
+
+<!-- SLIDE 10 -->
+
+<article class="slide">
+
+<p class="eyebrow">Message 10 • One last thing</p>
+
+<div class="photo-slot">
+  <img src="file:///C:/Users/yenum/Downloads/image9.jpeg" alt="Birthday memory">
+</div>
+
+<div class="emoji-art">🎂</div>
+
+<h1>Happiest Birthday!</h1>
+
+<p class="message">
+May your smile never fade, your heart stay hopeful and your year be full of love, success and magical moments. Keep smiling and enjoy your day!
+</p>
+
+<div class="quote">
+With lots of love and the warmest wishes---panduuuu. 💖
+</div>
+
+<div class="actions">
+  <button class="primary" id="restart">↻ Replay the wishes</button>
+</div>
+
+</article>
+
+<!-- NAVIGATION -->
+
+<div class="nav">
+
+<button class="secondary" id="prev" type="button" disabled>
+← Previous
+</button>
+
+<div class="dots" id="dots" aria-label="Choose a slide"></div>
+
+<button class="primary" id="next" type="button">
+Next →
+</button>
+
+<span class="small" id="hint">Use ← → keys too</span>
+
+</div>
+
+<div class="actions" style="margin-top:12px">
+
+<button class="secondary" id="music" type="button">
+♫ Play birthday tune
+</button>
+
+<span id="musicStatus" aria-live="polite">
+Music starts when you press play
+</span>
+
+</div>
+
+</section>
+</main>
+
+<script>
+
+(function(){
+
+const root=document.getElementById('birthday-site');
+
+const slides=[...root.querySelectorAll('.slide')];
+
+const prev=root.querySelector('#prev');
+const next=root.querySelector('#next');
+
+const fill=root.querySelector('#progressFill');
+const count=root.querySelector('#count');
+
+const dots=root.querySelector('#dots');
+const restart=root.querySelector('#restart');
+
+let current=0;
+let audioCtx=null;
+let oscillators=[];
+let musicOn=false;
+
+// CREATE NAVIGATION DOTS
+
+slides.forEach((_,i)=>{
+
+  const b=document.createElement('button');
+
+  b.type='button';
+
+  b.className='dot'+(i===0?' current':'');
+
+  b.setAttribute('aria-label','Go to message '+(i+1));
+
+  b.addEventListener('click',()=>show(i));
+
+  dots.appendChild(b);
+
+});
+
+const dotButtons=[...dots.children];
+
+// SHOW SLIDES
+
+function show(index){
+
+  current=Math.max(0,Math.min(slides.length-1,index));
+
+  slides.forEach((s,i)=>{
+
+    s.classList.toggle('active',i===current);
+
+    s.setAttribute('aria-hidden',i!==current);
+
+  });
+
+  dotButtons.forEach((d,i)=>{
+
+    d.classList.toggle('current',i===current);
+
+    d.setAttribute(
+      'aria-current',
+      i===current?'step':'false'
+    );
+
+  });
+
+  prev.disabled=current===0;
+
+  next.disabled=current===slides.length-1;
+
+  next.textContent=
+    current===slides.length-2
+    ?'Last message →'
+    :'Next →';
+
+  fill.style.width=
+    ((current+1)/slides.length*100)+'%';
+
+  count.textContent=
+    String(current+1).padStart(2,'0')
+    +' / '+slides.length;
+
+  if(current===slides.length-1){
+    celebrate();
+  }
+
+}
+
+// CONFETTI
+
+function celebrate(){
+
+  const layer=root.querySelector('#confettiLayer');
+
+  layer.innerHTML='';
+
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    return;
+  }
+
+  const colors=[
+    '#ff79a8',
+    '#a78bfa',
+    '#ffd166',
+    '#70d6c4',
+    '#ff9f68'
+  ];
+
+  for(let i=0;i<65;i++){
+
+    const p=document.createElement('i');
+
+    p.className='confetti';
+
+    p.style.left=Math.random()*100+'%';
+
+    p.style.background=colors[i%colors.length];
+
+    p.style.animationDelay=(Math.random()*1.2)+'s';
+
+    p.style.transform=
+      'rotate('+Math.random()*360+'deg)';
+
+    layer.appendChild(p);
+
+  }
+
+  setTimeout(()=>layer.innerHTML='',5200);
+
+}
+
+// NAVIGATION BUTTONS
+
+prev.addEventListener('click',()=>show(current-1));
+
+next.addEventListener('click',()=>show(current+1));
+
+root.querySelectorAll('[data-next]').forEach(b=>
+  b.addEventListener('click',()=>show(current+1))
+);
+
+restart.addEventListener('click',()=>show(0));
+
+// KEYBOARD NAVIGATION
+
+document.addEventListener('keydown',e=>{
+
+  if(e.key==='ArrowRight'){
+    show(current+1);
+  }
+
+  if(e.key==='ArrowLeft'){
+    show(current-1);
+  }
+
+});
+
+// BIRTHDAY MUSIC
+
+const musicBtn=root.querySelector('#music');
+
+const status=root.querySelector('#musicStatus');
+
+function stopMusic(){
+
+  oscillators.forEach(o=>{
+    try{o.stop()}catch(_){}
+  });
+
+  oscillators=[];
+
+  musicOn=false;
+
+  musicBtn.textContent='♫ Play birthday tune';
+
+  status.textContent='Music paused';
+
+}
+
+function playMelody(){
+
+  const AudioContext=
+    window.AudioContext||window.webkitAudioContext;
+
+  if(!AudioContext){
+
+    status.textContent=
+      'Audio is not supported in this browser';
+
+    return;
+
+  }
+
+  if(!audioCtx){
+    audioCtx=new AudioContext();
+  }
+
+  audioCtx.resume();
+
+  musicOn=true;
+
+  musicBtn.textContent='Ⅱ Pause birthday tune';
+
+  status.textContent='A little birthday melody is playing';
+
+  const notes=[
+    523.25,523.25,587.33,523.25,
+    698.46,659.25,523.25,523.25,
+    587.33,523.25,783.99,698.46
+  ];
+
+  let start=audioCtx.currentTime;
+
+  notes.forEach((freq,i)=>{
+
+    const osc=audioCtx.createOscillator();
+
+    const gain=audioCtx.createGain();
+
+    osc.type='sine';
+
+    osc.frequency.value=freq;
+
+    gain.gain.setValueAtTime(
+      .0001,start+i*.34
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+      .075,start+i*.34+.025
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+      .0001,start+i*.34+.29
+    );
+
+    osc.connect(gain);
+
+    gain.connect(audioCtx.destination);
+
+    osc.start(start+i*.34);
+
+    osc.stop(start+i*.34+.31);
+
+    oscillators.push(osc);
+
+  });
+
+  setTimeout(()=>{
+
+    if(musicOn){
+
+      musicOn=false;
+
+      musicBtn.textContent='♫ Play birthday tune';
+
+      status.textContent='Play the tune again anytime';
+
+    }
+
+  },notes.length*340+400);
+
+}
+
+musicBtn.addEventListener('click',()=>{
+
+  musicOn?stopMusic():playMelody();
+
+});
+
+// START
+
+show(0);
+
+})();
+
+</script>
+
+</body>
+</html>
